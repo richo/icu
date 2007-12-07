@@ -2,7 +2,7 @@ require 'rake/gempackagetask'
 
 spec = Gem::Specification.new do |s| 
   s.name = 'icu'
-  s.version = '0.9'
+  s.version = '0.9.0'
   s.author = 'Joshua Llorach'
   s.email = 'josh@vectrice.com'
   s.homepage = 'http://vectrice.com/'
