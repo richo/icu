@@ -1,37 +1,23 @@
+// Copyright (c) 2007 Joshua Llorach
+//  
+// This file is part of ICU Ruby extension.
+// 
+// ICU is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// Foobar is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//  
+// You should have received a copy of the GNU Lesser General Public License
+// along with ICU.  If not, see <http://www.gnu.org/licenses/>.
+
 #include "icu.h"
 
 #include "unicode/unum.h"
-
-//UNumberFormatRoundingMode parseRoundingModeOption(VALUE rb_options)
-//{
-//	VALUE rounding_mode;
-//	
-//	rounding_mode = rb_hash_aref(rb_options, ID2SYM(rb_intern("round_mode")));
-//	if (rounding_mode != Qnil) {
-//		ID rounding_mode_ID;
-//		
-//		Check_Type(rounding_mode, T_SYMBOL);
-//		rounding_mode_ID = SYM2ID(rounding_mode);
-//		if (rounding_mode_ID == rb_intern("ceil")) {
-//			return UNUM_ROUND_CEILING;
-//		} else if (rounding_mode_ID == rb_intern("floor")) {
-//			return UNUM_ROUND_FLOOR;
-//		} else if (rounding_mode_ID == rb_intern("down")) {
-//			return UNUM_ROUND_DOWN;
-//		} else if (rounding_mode_ID == rb_intern("up")) {
-//			return UNUM_ROUND_UP;
-//		} else if (rounding_mode_ID == rb_intern("halfeven")) {
-//			return UNUM_FOUND_HALFEVEN;
-//		} else if (rounding_mode_ID == rb_intern("halfdown")) {
-//			return UNUM_ROUND_HALFDOWN;
-//		} else if (rounding_mode_ID == rb_intern("halfup")) {
-//			return UNUM_ROUND_HALFUP;
-//		} else {
-//			rb_raise(rb_eArgError, "unsupported rounding mode '%s'", rb_id2name(rounding_mode_ID));
-//		}
-//	}
-//	return -1;
-//}
 
 /******************* Numeric */
 
