@@ -6,7 +6,7 @@ Pragmatic integration of ICU (International Components for Unicode) into Ruby. F
 
 ICU::Locale.default = 'en_US'
 => 'en_US'
-locale = ICU::Locale.default
+locale = ICU::Locale.get('es_ES')
 => #<ICU::Locale:0x2ac572348c00 @locale_id="en_US">
 locale.country.name
 => 'Spain'
@@ -62,11 +62,11 @@ The prefered method of installing ICU is through its GEM file. You'll need to ha
 RubyGems[http://rubygems.rubyforge.org/wiki/wiki.pl] installed for that, though. If you have,
 then use:
 
-  % [sudo] gem install icu-x.x.x.gem
+  % [sudo] gem install icu
   
 If fails try with:
 
-  % [sudo] gem install icu-x.x.x.gem -- --with-icu-lib=/usr/local/lib --with-icu-include=/usr/local/src/icu/source/i18n
+  % [sudo] gem install icu -- --with-icu-lib=/usr/local/lib --with-icu-include=/usr/local/src/icu/source/i18n
   
 See ext/extconf.rb
 
@@ -75,6 +75,7 @@ See ext/extconf.rb
 
 You can find the ICU RubyForge page at http://rubyforge.org/projects/icu.
 For other information, feel free to contact mailto:josh@vectrice.com.
+
 
 == License
 
