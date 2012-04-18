@@ -1,5 +1,5 @@
 # Copyright (c) 2007 Joshua Llorach
-# 
+#
 # This file is part of ICU Ruby extension.
 #
 # ICU is free software: you can redistribute it and/or modify
@@ -15,4 +15,4 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with ICU.  If not, see <http://www.gnu.org/licenses/>.
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'icu.so'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'ext', 'icu.so'))

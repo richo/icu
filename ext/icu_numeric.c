@@ -1,17 +1,17 @@
 // Copyright (c) 2007 Joshua Llorach
-//  
+//
 // This file is part of ICU Ruby extension.
-// 
+//
 // ICU is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // ICU is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-//  
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with ICU.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -30,10 +30,10 @@ VALUE rb_numeric_localize(int argc, VALUE *argv, VALUE self)
 	VALUE style, options;
 	UNumberFormatStyle formatStyle;
 	char *locale = NULL;
-	
+
 	UNumberFormat *format;
 	UErrorCode status;
-	
+
 	UChar result[256];
 	/* arguments */
 	rb_scan_args(argc, argv, "02", &style, &options);
@@ -41,7 +41,7 @@ VALUE rb_numeric_localize(int argc, VALUE *argv, VALUE self)
 		formatStyle = UNUM_DECIMAL;
 	} else {
 		ID style_ID;
-		
+
 		Check_Type(style, T_SYMBOL);
 		style_ID = SYM2ID(style);
 		if (style_ID == rb_intern("decimal")) {
@@ -60,7 +60,7 @@ VALUE rb_numeric_localize(int argc, VALUE *argv, VALUE self)
 	}
 	if (options != Qnil) {
 		VALUE rb_locale;
-		
+
 		Check_Type(options, T_HASH);
 		rb_locale = rb_hash_aref(options, ID2SYM(rb_intern("locale")));
 		if (rb_locale != Qnil) {
@@ -74,14 +74,14 @@ VALUE rb_numeric_localize(int argc, VALUE *argv, VALUE self)
     /* set format attributes */
 	if (options != Qnil) {
 		VALUE currency, precision, round_mode, round_increment;
-		
+
 		switch (formatStyle) {
 			case UNUM_CURRENCY:
 				currency = rb_hash_aref(options, ID2SYM(rb_intern("currency")));
 				if (currency != Qnil) {
 					UChar *uStr;
 					int32_t uStrLen;
-					
+
 					uStr = u_strFromRString(currency, &uStrLen);
 					status = U_ZERO_ERROR;
 					unum_setTextAttribute(format, UNUM_CURRENCY_CODE, uStr, uStrLen, &status);
@@ -96,12 +96,12 @@ VALUE rb_numeric_localize(int argc, VALUE *argv, VALUE self)
 					unum_setAttribute(format, UNUM_FRACTION_DIGITS, NUM2INT(precision));
 					RAISE_ON_ERROR(status);
 				}
-				
+
 				round_mode = rb_hash_aref(options, ID2SYM(rb_intern("round_mode")));
 				if (round_mode != Qnil) {
 					ID round_mode_ID;
 					UNumberFormatRoundingMode rounding_mode;
-					
+
 					Check_Type(round_mode, T_SYMBOL);
 					round_mode_ID = SYM2ID(round_mode);
 					if (round_mode_ID == rb_intern("ceil")) {
@@ -146,12 +146,12 @@ VALUE rb_numeric_localize(int argc, VALUE *argv, VALUE self)
     	case T_BIGNUM:
 			unum_formatInt64(format, rb_big2ll(self), result, 256, NULL, &status);
     		break;
-			
+
     }
     RAISE_ON_ERROR(status);
     /* free resources */
     unum_close(format);
-   
+
     return u_strToRString(result, -1);
 }
 

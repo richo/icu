@@ -1,17 +1,17 @@
 // Copyright (c) 2007 Joshua Llorach
-//  
+//
 // This file is part of ICU Ruby extension.
-// 
+//
 // ICU is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // ICU is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-//  
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with ICU.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -21,7 +21,7 @@
 
 VALUE cLocale;
 
-/* Returns the default locale 
+/* Returns the default locale
  *  call-seq:
  *     ICU::Locale.default => locale
  */
@@ -35,23 +35,23 @@ VALUE rb_ICU_Locale_singleton_default(VALUE self)
  *     ICU::Locale.set(locale) => true
  *
  * Sets default locale.
- * 
- * By default (without calling this function), default locale will be based on information obtained from the underlying system environment. 
+ *
+ * By default (without calling this function), default locale will be based on information obtained from the underlying system environment.
  * A value of NULL will try to get the system's default locale.
- * 
+ *
  */
 VALUE rb_ICU_Locale_singleton_default_setter(VALUE self, VALUE locale)
 {
 	char *cpLocale = NULL;
 	UErrorCode status = U_ZERO_ERROR;
-	
+
 	if (locale != Qnil) {
 		cpLocale = StringValuePtr(locale);
 		CheckLocaleID(cpLocale);
 	}
 	uloc_setDefault(cpLocale, &status);
 	RAISE_ON_ERROR(status);
-	
+
 	return Qnil;
 }
 
@@ -62,13 +62,13 @@ VALUE rb_ICU_Locale_singleton_default_setter(VALUE self, VALUE locale)
 VALUE rb_ICU_Locale_singleton_get(VALUE self, VALUE locale_id)
 {
 	VALUE locales, locale;
-	
+
 	Check_Type(locale_id, T_STRING);
 	locales = rb_iv_get(self, "@@locales");
 	locale = rb_hash_aref(locales, locale_id);
 	if (locale == Qnil) {
 		VALUE args[1];
-		
+
 		args[0] = locale_id;
 		locale = rb_class_new_instance(1, args, self);
 		rb_hash_aset(locales, locale_id, locale);
@@ -85,18 +85,18 @@ VALUE rb_ICU_Locale_singleton_available(int argc, VALUE *argv, VALUE self)
 	VALUE options;
 	char *locale = NULL;
 	VALUE allowed = Qfalse, languages = Qfalse, countries = Qfalse, group = Qfalse;
-	
+
 	long i;
 	int32_t length = uloc_countAvailable();
 	UErrorCode status = U_ZERO_ERROR;
 	VALUE select = rb_ary_new2(length);
-	
+
 	UCollator *collator;
-	
+
 	rb_scan_args(argc, argv, "01", &options);
 	if (options != Qnil) {
 		VALUE rb_locale;
-		
+
 		Check_Type(options, T_HASH);
 		rb_locale = rb_hash_aref(options, ID2SYM(rb_intern("locale")));
 		if (rb_locale != Qnil) {
@@ -126,17 +126,17 @@ VALUE rb_ICU_Locale_singleton_available(int argc, VALUE *argv, VALUE self)
 
 	for (i = 0; i < length; i++)	{
 		const char *availableLocale = uloc_getAvailable(i);
-		
+
 		UChar *displayName = ALLOC_N(UChar, 64);
 		int32_t displayNameLen = 64;
 		VALUE option;
-		
+
 		if (allowed && !rb_ary_includes(allowed, rb_str_new2(availableLocale)))
 			continue;
 		if (languages) {
 			char language[3];
 			int32_t languageLen = 3;
-			
+
 			languageLen = uloc_getLanguage(availableLocale, language, languageLen, &status);
 			RAISE_ON_ERROR(status);
 			if (!rb_ary_includes(languages, rb_str_new(language, languageLen)))
@@ -145,7 +145,7 @@ VALUE rb_ICU_Locale_singleton_available(int argc, VALUE *argv, VALUE self)
 		if (countries) {
 			char country[3];
 			int32_t countryLen = 3;
-			
+
 			countryLen = uloc_getCountry(availableLocale, country, countryLen, &status);
 			RAISE_ON_ERROR(status);
 			if (!rb_ary_includes(countries, rb_str_new(country, countryLen)))
@@ -158,7 +158,7 @@ VALUE rb_ICU_Locale_singleton_available(int argc, VALUE *argv, VALUE self)
 			uloc_getDisplayName(availableLocale, locale, displayName, displayNameLen, &status);
 		}
 	    RAISE_ON_ERROR(status);
-	    
+
     	option = rb_ary_new2(2);
     	rb_ary_push(option, u_strToRString(displayName, displayNameLen));
     	rb_ary_push(option, rb_str_new2(availableLocale));
@@ -172,26 +172,26 @@ VALUE rb_ICU_Locale_singleton_available(int argc, VALUE *argv, VALUE self)
 		char groupLanguageCode[3] = "";
 		VALUE tmpSelect = rb_ary_new();
 		VALUE options;
-		
+
 		//ruby_qsort(RARRAY(select)->ptr, RARRAY(select)->len, sizeof(VALUE), collateByLocaleID, collator);
-		for (i = 0; i < RARRAY(select)->len; i++) {
+		for (i = 0; i < RARRAY_LEN(select); i++) {
 			char languageCode[4];
 			int32_t languageCodeLen = 4;
-			
-			languageCodeLen = uloc_getLanguage(RSTRING(RARRAY(RARRAY(select)->ptr[i])->ptr[1])->ptr, languageCode, languageCodeLen, &status);
+
+			languageCodeLen = uloc_getLanguage(RSTRING_PTR(RARRAY_PTR(RARRAY_PTR(select)[i])[1]), languageCode, languageCodeLen, &status);
 			RAISE_ON_ERROR(status);
-			
+
 			if (strcmp(groupLanguageCode, languageCode)) {
 				UChar *languageName = ALLOC_N(UChar, 32);
 				int32_t languageNameLen = 32;
 				VALUE group = rb_ary_new2(2);
-				
+
 				//get display name
-				languageNameLen = uloc_getDisplayLanguage(RSTRING(RARRAY(RARRAY(select)->ptr[i])->ptr[1])->ptr, locale, languageName, languageNameLen, &status);
+				languageNameLen = uloc_getDisplayLanguage(RSTRING_PTR(RARRAY_PTR(RARRAY_PTR(select)[i])[1]), locale, languageName, languageNameLen, &status);
 				if (status == U_BUFFER_OVERFLOW_ERROR) {
 					status = U_ZERO_ERROR;
 					REALLOC_N(languageName, UChar, languageNameLen);
-					uloc_getDisplayLanguage(RSTRING(RARRAY(RARRAY(select)->ptr[i])->ptr[1])->ptr, locale, languageName, languageNameLen, &status);
+					uloc_getDisplayLanguage(RSTRING_PTR(RARRAY_PTR(RARRAY_PTR(select)[i])[1]), locale, languageName, languageNameLen, &status);
 				}
 				RAISE_ON_ERROR(status);
 				//create group
@@ -199,20 +199,20 @@ VALUE rb_ICU_Locale_singleton_available(int argc, VALUE *argv, VALUE self)
 				options = rb_ary_new();
 				rb_ary_push(group, options);
 				rb_ary_push(tmpSelect, group);
-				
+
 				strcpy(groupLanguageCode, languageCode);
 			}
 			//add option
-			rb_ary_push(options, RARRAY(select)->ptr[i]);
+			rb_ary_push(options, RARRAY_PTR(select)[i]);
 		}
 		select = tmpSelect;
-		for (i = 0; i < RARRAY(select)->len; i++) {
-			ruby_qsort(RARRAY(RARRAY(RARRAY(select)->ptr[i])->ptr[1])->ptr, RARRAY(RARRAY(RARRAY(select)->ptr[i])->ptr[1])->len, sizeof(VALUE), collateByDisplayName, collator);
+		for (i = 0; i < RARRAY_LEN(select); i++) {
+			ruby_qsort(RARRAY_PTR(RARRAY_PTR(RARRAY_PTR(select)[i])[1]), RARRAY_LEN(RARRAY_PTR(RARRAY_PTR(select)[i])[1]), sizeof(VALUE), collateByDisplayName, collator);
 		}
 	}
-	ruby_qsort(RARRAY(select)->ptr, RARRAY(select)->len, sizeof(VALUE), collateByDisplayName, collator);
+	ruby_qsort(RARRAY_PTR(select), RARRAY_LEN(select), sizeof(VALUE), collateByDisplayName, collator);
 	ucol_close(collator);
-	
+
 	return select;
 }
 
@@ -227,17 +227,17 @@ VALUE rb_ICU_Locale_singleton_determine_from_http(VALUE self, VALUE acceptLangua
 	char *locale = ALLOC_N(char, 16);
 	int32_t localeLen;
 	UAcceptResult outResult;
-	
+
 	availableLocales = ures_openAvailableLocales(NULL, &status);
 	RAISE_ON_ERROR(status);
-	localeLen = uloc_acceptLanguageFromHTTP(locale, 16, &outResult, RSTRING(acceptLanguageHeader)->ptr, availableLocales, &status);
+	localeLen = uloc_acceptLanguageFromHTTP(locale, 16, &outResult, RSTRING_PTR(acceptLanguageHeader), availableLocales, &status);
 	if (status == U_BUFFER_OVERFLOW_ERROR) {
 		status = U_ZERO_ERROR;
 		REALLOC_N(locale, char, localeLen);
-		uloc_acceptLanguageFromHTTP(locale, localeLen, &outResult, RSTRING(acceptLanguageHeader)->ptr, availableLocales, &status);
+		uloc_acceptLanguageFromHTTP(locale, localeLen, &outResult, RSTRING_PTR(acceptLanguageHeader), availableLocales, &status);
 	}
 	RAISE_ON_ERROR(status);
-	
+
 	return rb_str_new(locale, localeLen);
 }
 
@@ -246,7 +246,7 @@ VALUE rb_ICU_Locale_initialize(VALUE self, VALUE locale_id)
 	Check_Type(locale_id, T_STRING);
 	CheckLocaleID(StringValuePtr(locale_id));
 	rb_iv_set(self, "@locale_id", locale_id);
-	
+
 	return self;
 }
 
@@ -255,8 +255,8 @@ VALUE rb_ICU_Locale_parent(VALUE self)
 	char parent[16];
 	int32_t parentLen = 16;
 	UErrorCode status = U_ZERO_ERROR;
-	
-	parentLen = uloc_getParent(RSTRING(rb_iv_get(self, "@locale_id"))->ptr, parent, parentLen, &status);
+
+	parentLen = uloc_getParent(RSTRING_PTR(rb_iv_get(self, "@locale_id")), parent, parentLen, &status);
 
 	return parentLen ? rb_funcall(cLocale, rb_intern("get"), 1, rb_str_new(parent, parentLen)) : Qnil;
 }
@@ -264,18 +264,18 @@ VALUE rb_ICU_Locale_parent(VALUE self)
 VALUE rb_ICU_Locale_country(VALUE self)
 {
 	extern VALUE cCountry;
-	
+
 	VALUE country;
-	
+
 	country = rb_iv_get(self, "@country");
 	if (country == Qnil) {
 		char country[3];
 		int32_t countryLen = 3;
 		UErrorCode status = U_ZERO_ERROR;
-		
-		countryLen = uloc_getCountry(RSTRING(rb_iv_get(self, "@locale_id"))->ptr, country, countryLen, &status);
+
+		countryLen = uloc_getCountry(RSTRING_PTR(rb_iv_get(self, "@locale_id")), country, countryLen, &status);
 		RAISE_ON_ERROR(status);
-		
+
 		return rb_iv_set(self, "@country", countryLen ? rb_funcall(cCountry, rb_intern("get"), 1, rb_str_new(country, countryLen)) : Qnil);
 	} else {
 		return country;
@@ -285,18 +285,18 @@ VALUE rb_ICU_Locale_country(VALUE self)
 VALUE rb_ICU_Locale_language(VALUE self)
 {
 	extern VALUE cLanguage;
-	
+
 	VALUE language;
-	
+
 	language = rb_iv_get(self, "@language");
 	if (language == Qnil) {
 		char language[3];
 		int32_t languageLen = 3;
 		UErrorCode status = U_ZERO_ERROR;
-		
-		languageLen = uloc_getLanguage(RSTRING(rb_iv_get(self, "@locale_id"))->ptr, language, languageLen, &status);
+
+		languageLen = uloc_getLanguage(RSTRING_PTR(rb_iv_get(self, "@locale_id")), language, languageLen, &status);
 		RAISE_ON_ERROR(status);
-		
+
 		return rb_iv_set(self, "@language", languageLen ? rb_funcall(cLanguage, rb_intern("get"), 1, rb_str_new(language, languageLen)) : Qnil);
 	} else {
 		return language;
@@ -308,7 +308,7 @@ void Init_ICU_Locale(void)
 	extern VALUE mICU;
 	extern void Init_ICU_Locale_Country(void);
 	extern void Init_ICU_Locale_Language(void);
-	
+
 	cLocale = rb_define_class_under(mICU, "Locale", rb_cObject);
 	rb_define_singleton_method(cLocale, "default", rb_ICU_Locale_singleton_default, 0);
 	rb_define_singleton_method(cLocale, "default=", rb_ICU_Locale_singleton_default_setter, 1);
@@ -324,7 +324,7 @@ void Init_ICU_Locale(void)
 	rb_define_method(cLocale, "parent", rb_ICU_Locale_parent, 0);
 	rb_define_method(cLocale, "country", rb_ICU_Locale_country, 0);
 	rb_define_method(cLocale, "language", rb_ICU_Locale_language, 0);
-	
+
 	Init_ICU_Locale_Country();
 	Init_ICU_Locale_Language();
 }

@@ -1,4 +1,4 @@
-require 'test/unit'
+﻿require 'test/unit'
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'icu'))
 
 class TestLocale < Test::Unit::TestCase
@@ -51,7 +51,7 @@ class TestLocale < Test::Unit::TestCase
   	assert_raise(ArgumentError) { ICU::Locale::Language.get('worg language') }
   end
   
-  def test_available  
+  def test_available
   	assert_equal(["Afrikaans", "af"], ICU::Locale.available[0])
   	assert_equal(["afrikaans (Afrique du Sud)", "af_ZA"], ICU::Locale.available(:locale => 'fr_FR')[1])
   	assert_equal(["albanski (Albanija)", "sq_AL"], ICU::Locale.available(:locale => ICU::Locale.get('hr_HR'))[3])
@@ -63,7 +63,7 @@ class TestLocale < Test::Unit::TestCase
   		[["Spanish (Spain)", "es_ES"], ["Spanish (United States)", "es_US"]],
   		ICU::Locale.available(:allowed => ['es_ES', 'ca_ES', 'en_US', 'en_GB', 'es_US'], :languages => ['es'], :countries => ['ES', 'US'])
   	)
-  	
+
   	assert_equal(["Albanian", [["Albanian", "sq"], ["Albanian (Albania)", "sq_AL"]]], ICU::Locale.available(:group => true)[1])
   end
   
