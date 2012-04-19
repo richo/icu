@@ -1,13 +1,13 @@
-PKG_VERSION = '0.9.1'
+PKG_VERSION = '0.9.2'
 
 require 'rake/gempackagetask'
 
-spec = Gem::Specification.new do |s| 
+spec = Gem::Specification.new do |s|
   s.name = 'icu'
   s.version = PKG_VERSION
-  s.author = 'Joshua Llorach'
-  s.email = 'josh@vectrice.com'
-  s.homepage = 'http://vectrice.com/'
+  s.authors = ['Joshua Llorach', "Rich Healey"]
+  s.email = 'richard.healey@99designs.com'
+  s.homepage = 'http://github.com/99designs/icu'
   s.platform = Gem::Platform::RUBY
   s.summary = 'International Components for Unicode for Ruby'
   s.files = FileList['{ext,lib,test}/**/*'].to_a << 'COPYING' << 'COPYING.LESSER'
@@ -19,9 +19,9 @@ spec = Gem::Specification.new do |s|
   s.extra_rdoc_files = ['README']
   s.rubyforge_project = 'icu'
 end
- 
-Rake::GemPackageTask.new(spec) do |pkg| 
-  pkg.need_tar = true 
+
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.need_tar = true
 end
 
 desc "Publish the release files to RubyForge."
