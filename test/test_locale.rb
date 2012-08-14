@@ -54,7 +54,7 @@ class TestLocale < Test::Unit::TestCase
   def test_available
   	assert_equal(["Afrikaans", "af"], ICU::Locale.available[0])
   	assert_equal(["afrikaans (Afrique du Sud)", "af_ZA"], ICU::Locale.available(:locale => 'fr_FR')[1])
-  	assert_equal(["albanski (Albanija)", "sq_AL"], ICU::Locale.available(:locale => ICU::Locale.get('hr_HR'))[3])
+  	assert_includes(ICU::Locale.available(:locale => ICU::Locale.get('hr_HR')), ["albanski (Albanija)", "sq_AL"])
 
   	assert_equal([["English (United States)", "en_US"], ["Spanish (Spain)", "es_ES"]], ICU::Locale.available(:allowed => ['es_ES', 'en_US']))
   	assert_equal(["English", "en"], ICU::Locale.available(:languages => ['es', 'en'])[0])
@@ -64,7 +64,7 @@ class TestLocale < Test::Unit::TestCase
   		ICU::Locale.available(:allowed => ['es_ES', 'ca_ES', 'en_US', 'en_GB', 'es_US'], :languages => ['es'], :countries => ['ES', 'US'])
   	)
 
-  	assert_equal(["Albanian", [["Albanian", "sq"], ["Albanian (Albania)", "sq_AL"]]], ICU::Locale.available(:group => true)[1])
+    assert_includes(ICU::Locale.available(:group => true), ["Albanian", [["Albanian", "sq"], ["Albanian (Albania)", "sq_AL"]]])
   end
 
   def test_determine
