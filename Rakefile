@@ -1,6 +1,7 @@
 PKG_VERSION = '0.9.2'
 
 require 'rake/gempackagetask'
+require 'rake/testtask'
 
 spec = Gem::Specification.new do |s|
   s.name = 'icu'
@@ -31,4 +32,10 @@ task :release => [ :package ] do
   rubyforge = RubyForge.new
   rubyforge.login
   rubyforge.add_release('icu', 'icu', "ICU #{PKG_VERSION}", "pkg/icu-#{PKG_VERSION}.gem", "pkg/icu-#{PKG_VERSION}.tgz")
+end
+
+Rake::TestTask.new do |t|
+  t.libs << "lib"
+  t.test_files = FileList['test/test*.rb']
+  t.verbose = true
 end
