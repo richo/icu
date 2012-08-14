@@ -39,3 +39,7 @@ Rake::TestTask.new do |t|
   t.test_files = FileList['test/test*.rb']
   t.verbose = true
 end
+
+task :build do
+  sh "cd ext; ruby extconf.rb; make"
+end
