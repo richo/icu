@@ -20,6 +20,8 @@
 #include "unicode/uloc.h"
 #include "unicode/ucol.h"
 
+#include "ruby/encoding.h"
+
 #define RAISE_ON_ERROR(e) if (U_FAILURE(e)) rb_raise(rb_eRuntimeError, u_errorName(e));
 #define SYMBOL2CSTR(s) rb_id2name(SYM2ID(s)));
 #define CheckLocaleID(x) if (!validLocale(x)) rb_raise(rb_eArgError, "Invalid locale id '%s'", x);

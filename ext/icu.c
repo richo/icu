@@ -79,6 +79,8 @@ VALUE u_strToRString(const UChar *uStr, int32_t uStrLen)
 	char *result = ALLOC_N(char, 64);
 	int32_t resultLen;
 
+    rb_encoding* encoding = rb_enc_find("UTF-8");
+
 	errorCode = U_ZERO_ERROR;
 	u_strToUTF8(result, 64, &resultLen, uStr, uStrLen, &errorCode);
 	if (errorCode == U_STRING_NOT_TERMINATED_WARNING || errorCode == U_BUFFER_OVERFLOW_ERROR) {
@@ -88,7 +90,7 @@ VALUE u_strToRString(const UChar *uStr, int32_t uStrLen)
 	}
 	RAISE_ON_ERROR(errorCode);
 
-	return rb_str_new(result, resultLen);
+	return rb_enc_str_new(result, resultLen, encoding);
 }
 
 VALUE collateByDisplayName(VALUE *a, VALUE *b, UCollator *collator)
