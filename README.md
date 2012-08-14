@@ -1,8 +1,10 @@
-= ICU -- International Components for Unicode for Ruby
+# ICU -- International Components for Unicode for Ruby
 
 Pragmatic integration of ICU (International Components for Unicode) into Ruby. Format numbers, dates, times and currency amounts according the conventions of a chosen locale.
 
-== Examples
+## Examples
+
+```ruby
 
 ICU::Locale.default = 'en_US'
 => 'en_US'
@@ -39,44 +41,52 @@ Time.utc(2006, 5, 8, 8, 31, 34).localize(:date => :full, :locale => 'es_ES')
 Time.pattern(:time => :full, :locale => 'es_ES')
 => "dd/MM/yyyy HH'H'mm''ss\" z"
 
+```
+
 See more in units tests in test/
 
 
-== Download
+## Download
 
 The latest version of ICU can be found at
 
 * http://rubyforge.org/frs/?group_id=5009
 
 
-== Requeriments
+## Requeriments
 
 You must install ICU 3.6 or 3.8 from http://icu-project.org/download/
 
 See ext/extconf.rb
 
 
-== Installation
+## Installation
 
 The prefered method of installing ICU is through its GEM file. You'll need to have
-RubyGems[http://rubygems.rubyforge.org/wiki/wiki.pl] installed for that, though. If you have,
+[RubyGems](http://rubygems.rubyforge.org/wiki/wiki.pl) installed for that, though. If you have,
 then use:
 
-  % [sudo] gem install icu
-  
+```bash
+
+[sudo] gem install icu
+```
+
 If fails try with:
 
-  % [sudo] gem install icu -- --with-icu-lib=/usr/local/lib --with-icu-include=/usr/local/src/icu/source/i18n
-  
+```bash
+
+[sudo] gem install icu -- --with-icu-lib=/usr/local/lib --with-icu-include=/usr/local/src/icu/source/i18n
+```
+
 See ext/extconf.rb
 
 
-== Support
+## Support
 
 You can find the ICU RubyForge page at http://rubyforge.org/projects/icu.
 For other information, feel free to contact mailto:josh@vectrice.com.
 
 
-== License
+## License
 
 Copyright (c) 2007 Joshua Llorach, released under the GNU Lesser General Public License
