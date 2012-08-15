@@ -39,13 +39,13 @@ class TestNumeric < Test::Unit::TestCase
     assert_equal('($1,073,741,823.32)', -1073741823.323.localize(:currency))
     assert_equal('€1,073,741,823.32', 1073741823.323.localize(:currency, :currency => 'EUR'))
 
-    assert_equal('1.073.741.823,32 €', 1073741823.323.localize(:currency, :locale => 'es_ES'))
-    assert_equal('-1.073.741.823,32 €', -1073741823.323.localize(:currency, :locale => 'es_ES'))
-    assert_equal('1.073.741.823,32 US$', 1073741823.323.localize(:currency, :locale => 'es_ES', :currency => 'USD'))
+    assert_equal('1.073.741.823,32 €', 1073741823.323.localize(:currency, :locale => 'es_ES'))
+    assert_equal('-1.073.741.823,32 €', -1073741823.323.localize(:currency, :locale => 'es_ES'))
+    assert_equal('1.073.741.823,32 US$', 1073741823.323.localize(:currency, :locale => 'es_ES', :currency => 'USD'))
 
-    assert_equal('1,073,741,823.32 ₪', 1073741823.323.localize(:currency, :locale => 'he_IL'))
-    assert_equal('-1,073,741,823.32 ₪', -1073741823.323.localize(:currency, :locale => 'he_IL'))
-    assert_equal('1,073,741,823.32 $', 1073741823.323.localize(:currency, :locale => 'he_IL', :currency => 'USD'))
+    assert_equal('1,073,741,823.32 ₪', 1073741823.323.localize(:currency, :locale => 'he_IL'))
+    assert_equal('-1,073,741,823.32 ₪', -1073741823.323.localize(:currency, :locale => 'he_IL'))
+    assert_equal('1,073,741,823.32 US$', 1073741823.323.localize(:currency, :locale => 'he_IL', :currency => 'USD'))
   end
 
   def test_rounding
