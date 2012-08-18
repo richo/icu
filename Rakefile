@@ -40,6 +40,10 @@ Rake::TestTask.new do |t|
   t.verbose = true
 end
 
+task :dependencies do
+  sh "apt-get -qq install libicu-dev"
+end
+
 task :build do
   sh "cd ext; ruby extconf.rb; make"
 end
