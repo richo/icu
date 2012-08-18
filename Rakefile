@@ -41,7 +41,7 @@ Rake::TestTask.new do |t|
 end
 
 task :dependencies do
-  sh "apt-get -qq install libicu-dev"
+  sh "sudo apt-get -qq install libicu-dev"
 end
 
 task :build do
