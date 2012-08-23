@@ -8,12 +8,12 @@ spec = Gem::Specification.new do |s|
   s.homepage = 'http://github.com/99designs/icu'
   s.platform = Gem::Platform::RUBY
   s.summary = 'International Components for Unicode for Ruby'
-  s.files = FileList['{ext,lib,test}/**/*'].to_a << 'COPYING' << 'COPYING.LESSER'
+  s.files = Dir['{ext,lib,test}/**/*'].to_a << 'COPYING' << 'COPYING.LESSER'
   s.require_path = 'lib'
   s.autorequire = 'icu'
   s.extensions = ['ext/extconf.rb']
-  s.test_files = FileList['{test}/**/*'].to_a
+  s.test_files = Dir['{test}/**/*'].to_a
   s.has_rdoc = true
-  s.extra_rdoc_files = ['README']
+  s.extra_rdoc_files = ['README.md']
   s.rubyforge_project = 'icu'
 end
